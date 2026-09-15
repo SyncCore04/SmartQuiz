@@ -23,7 +23,7 @@ function request(path, method = 'GET', data = {}) {
 }
 
 // 游客登录（假账号）：传昵称，返回 userId
-function login(nickname = '张磊学长') {
+function login(nickname = '学长') {
   return request('/api/login', 'POST', { nickname }).then(d => {
     wx.setStorageSync(USER_KEY, d)
     return d
@@ -35,7 +35,7 @@ function login(nickname = '张磊学长') {
 // 因此能拿到当前库中最新有效的 user_id，避免本地缓存过期导致取不到数据。
 function ensureUser() {
   const u = wx.getStorageSync(USER_KEY)
-  const nickname = (u && u.nickname) ? u.nickname : '张磊学长'
+  const nickname = (u && u.nickname) ? u.nickname : '学长'
   return login(nickname)
 }
 

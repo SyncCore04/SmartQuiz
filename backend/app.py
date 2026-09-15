@@ -269,7 +269,7 @@ def add_cors_headers(resp):
 def login():
     """游客/假账号登录：不存在则创建"""
     data = request.get_json(silent=True) or {}
-    nickname = (data.get("nickname") or "张磊学长").strip()
+    nickname = (data.get("nickname") or "学长").strip()
     conn = get_db()
     row = conn.execute("SELECT * FROM user WHERE nickname=?", (nickname,)).fetchone()
     if row is None:
