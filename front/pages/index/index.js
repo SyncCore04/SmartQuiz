@@ -11,6 +11,18 @@ Page({
     overview: { done: 0, accuracy: '0%', streak: 0 }
   },
   onLoad() {
+    this.loadData()
+  },
+  onShow() {
+    // tabBar 页面切换回来时 onLoad 不会重跑，
+    // 必须在 onShow 里刷新数据，否则答题后回到首页统计不更新
+    this.loadData()
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 })
+    }
+  },
+  // 统一加载首页全部数据
+  loadData() {
     ensureUser().then(u => {
       return Promise.all([
         request('/api/swipers'),
@@ -33,11 +45,6 @@ Page({
         overview: { done: st.totalQuestions, accuracy: st.accuracy, streak: st.streakDays }
       })
     }).catch(() => {})
-  },
-  onShow() {
-    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ selected: 0 })
-    }
   },
   onSearch() {
     wx.navigateTo({ url: '/pages/category/category' })
