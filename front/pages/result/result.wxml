@@ -7,7 +7,7 @@
     </view>
     <text class="score-title">答题完成</text>
     <view class="score-badge">
-      <text class="badge-text">85%</text>
+      <text class="badge-text">{{accuracy}}</text>
       <text class="badge-label">正确率</text>
     </view>
   </view>

@@ -1,0 +1,45 @@
+// 统一的网络请求与游客登录工具
+// 真机演示时，把 BASE_URL 改成电脑的局域网 IP，如 http://192.168.1.100:5000
+const BASE_URL = 'http://127.0.0.1:5000'
+const USER_KEY = 'smartquiz_user'
+
+function request(path, method = 'GET', data = {}) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: BASE_URL + path,
+      method: method,
+      data: data,
+      success(res) {
+        const r = res.data
+        if (r && r.code === 0) {
+          resolve(r.data)
+        } else {
+          reject(r || { msg: '请求失败' })
+        }
+      },
+      fail: reject
+    })
+  })
+}
+
+// 游客登录（假账号）：传昵称，返回 userId
+function login(nickname = '清和学长') {
+  return request('/api/login', 'POST', { nickname }).then(d => {
+    wx.setStorageSync(USER_KEY, d)
+    return d
+  })
+}
+
+// 确保已有用户身份，没有则自动登录
+function ensureUser() {
+  const u = wx.getStorageSync(USER_KEY)
+  return (u && u.user_id) ? Promise.resolve(u) : login()
+}
+
+// 获取当前 user_id（可能为空，需先 ensureUser）
+function getUserId() {
+  const u = wx.getStorageSync(USER_KEY)
+  return u ? u.user_id : ''
+}
+
+module.exports = { BASE_URL, request, login, ensureUser, getUserId }

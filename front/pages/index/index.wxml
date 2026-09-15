@@ -20,17 +20,17 @@
   <!-- 学习数据概览 -->
   <view class="stats-overview">
     <view class="stat-item">
-      <text class="stat-num">128</text>
+      <text class="stat-num">{{overview.done}}</text>
       <text class="stat-label">已做题</text>
     </view>
     <view class="stat-divider"></view>
     <view class="stat-item">
-      <text class="stat-num">85%</text>
+      <text class="stat-num">{{overview.accuracy}}</text>
       <text class="stat-label">正确率</text>
     </view>
     <view class="stat-divider"></view>
     <view class="stat-item">
-      <text class="stat-num">7</text>
+      <text class="stat-num">{{overview.streak}}</text>
       <text class="stat-label">连续天数</text>
     </view>
   </view>

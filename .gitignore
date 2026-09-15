@@ -1,0 +1,24 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# ---------- SQLite 数据库（运行时由后端自动生成，不上传） ----------
+database/*.db
+database/*.db-journal
+
+# ---------- Node / npm ----------
+node_modules/
+front/node_modules/
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# ---------- 微信开发者工具个人配置（保留 project.config.json 公共配置） ----------
+front/project.private.config.json

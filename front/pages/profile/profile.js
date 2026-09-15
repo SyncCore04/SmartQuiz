@@ -1,14 +1,10 @@
+const { request, ensureUser } = require('../../utils/api')
+const USER_KEY = 'smartquiz_user'
+
 Page({
   data: {
-    userInfo: {
-      nickName: '清和学长',
-      avatar: '/images/photo-1517673132405-a56a62b18caf_w200.jpg'
-    },
-    stats: [
-      { label: '答题数', value: 568 },
-      { label: '正确率', value: '78%' },
-      { label: '连续天数', value: 15 }
-    ],
+    userInfo: { nickName: '加载中', avatar: '' },
+    stats: [],
     showAbout: false,
     menuList: [
       { icon: 'records', name: '答题记录', desc: '查看历史答题情况', url: '/pages/stats/stats', bgColor: '#ede9fe', iconColor: '#4F46E5' },
@@ -20,6 +16,11 @@ Page({
   },
   onLoad() {},
   onShow() {
+    ensureUser().then(u => {
+      return request('/api/profile?user_id=' + u.user_id)
+    }).then(d => {
+      this.setData({ userInfo: d.userInfo, stats: d.stats || [] })
+    }).catch(() => {})
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 2 })
     }
@@ -44,7 +45,14 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定退出登录吗？',
-      showCancel: true
+      showCancel: true,
+      success: res => {
+        if (res.confirm) {
+          wx.removeStorageSync(USER_KEY)
+          wx.showToast({ title: '已退出', icon: 'none' })
+          this.setData({ userInfo: { nickName: '未登录', avatar: '' }, stats: [] })
+        }
+      }
     })
   }
 })
