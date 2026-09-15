@@ -1,0 +1,97 @@
+<view class="page-container">
+  <!-- 渐变头部 -->
+  <view class="header-bg">
+    <view class="header-top">
+      <view class="user-info">
+        <view class="avatar-wrap">
+          <image class="avatar" src="{{userInfo.avatar}}" mode="aspectFill" />
+        </view>
+        <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="user-level">Lv.15 学习达人</text>
+      </view>
+    </view>
+    <!-- 统计数据 -->
+    <view class="stats-row">
+      <view class="stat-item" wx:for="{{stats}}" wx:key="label">
+        <text class="stat-value">{{item.value}}</text>
+        <text class="stat-label">{{item.label}}</text>
+      </view>
+    </view>
+    <view class="wave"></view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-card">
+    <view class="menu-item" wx:for="{{menuList}}" wx:key="name" data-item="{{item}}" bindtap="onMenuTap">
+      <view class="menu-icon-box" style="background: {{item.bgColor}};">
+        <van-icon name="{{item.icon}}" size="20px" color="{{item.iconColor}}" />
+      </view>
+      <view class="menu-content">
+        <text class="menu-title">{{item.name}}</text>
+        <text class="menu-desc">{{item.desc}}</text>
+      </view>
+      <van-icon name="arrow" size="14px" color="#ccc" />
+    </view>
+  </view>
+
+  <!-- 关于我们弹窗 -->
+  <view class="popup-mask" wx:if="{{showAbout}}" bindtap="onCloseAbout"></view>
+  <view class="popup-sheet {{showAbout ? 'popup-show' : ''}}" catchtouchmove="true">
+    <view class="popup-bar"></view>
+    <view class="popup-header">
+      <text class="popup-header-title">关于我们</text>
+      <view class="popup-close" bindtap="onCloseAbout">
+        <van-icon name="cross" size="20px" color="#999" />
+      </view>
+    </view>
+    <view class="popup-body">
+      <!-- 品牌区域 -->
+      <view class="about-brand">
+        <view class="about-logo">
+          <van-icon name="award-o" size="48px" color="#4F46E5" />
+        </view>
+        <text class="about-app-name">刷题宝</text>
+        <text class="about-slogan">轻松刷题 · 高效学习</text>
+      </view>
+
+      <!-- 品牌故事 -->
+      <view class="about-story-card">
+        <text class="about-story-text">刷题宝成立于 2021 年，是一款专注于移动端在线答题的学习工具。我们致力于为学生提供便捷、高效的刷题体验，让学习随时随地发生。</text>
+      </view>
+
+      <!-- 特色功能 -->
+      <view class="about-features">
+        <view class="about-feature-item">
+          <view class="about-feature-icon">
+            <van-icon name="flower-o" size="24px" color="#4F46E5" />
+          </view>
+          <text class="about-feature-name">绿色学习</text>
+        </view>
+        <view class="about-feature-item">
+          <view class="about-feature-icon">
+            <van-icon name="graphic" size="24px" color="#4F46E5" />
+          </view>
+          <text class="about-feature-name">数据驱动</text>
+        </view>
+        <view class="about-feature-item">
+          <view class="about-feature-icon">
+            <van-icon name="friends-o" size="24px" color="#4F46E5" />
+          </view>
+          <text class="about-feature-name">社区互动</text>
+        </view>
+        <view class="about-feature-item">
+          <view class="about-feature-icon">
+            <van-icon name="gift-o" size="24px" color="#4F46E5" />
+          </view>
+          <text class="about-feature-name">奖励激励</text>
+        </view>
+      </view>
+
+      <!-- 版本信息 -->
+      <view class="about-version">
+        <text class="about-version-text">版本 v1.0.0</text>
+        <text class="about-copyright">Copyright © 2021-2026 刷题宝团队</text>
+      </view>
+    </view>
+  </view>
+</view>

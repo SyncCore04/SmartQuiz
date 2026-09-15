@@ -1,0 +1,79 @@
+<view class="page-container">
+  <!-- 得分展示区 -->
+  <view class="score-header">
+    <view class="score-display">
+      <text class="score-number">{{score}}</text>
+      <text class="score-unit">分</text>
+    </view>
+    <text class="score-title">答题完成</text>
+    <view class="score-badge">
+      <text class="badge-text">85%</text>
+      <text class="badge-label">正确率</text>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-grid">
+    <view class="stat-card stat-correct">
+      <text class="stat-num">{{correctCount}}</text>
+      <text class="stat-desc">答对</text>
+    </view>
+    <view class="stat-card stat-wrong">
+      <text class="stat-num wrong-num">{{wrongCount}}</text>
+      <text class="stat-desc">答错</text>
+    </view>
+    <view class="stat-card stat-time">
+      <text class="stat-num">{{timeUsed}}</text>
+      <text class="stat-desc">用时</text>
+    </view>
+  </view>
+
+  <!-- 答题详情 -->
+  <view class="section">
+    <view class="section-title-row">
+      <text class="section-title-text">答题详情</text>
+      <text class="section-count">共{{results.length}}题</text>
+    </view>
+    <view class="detail-list">
+      <view
+        class="detail-card {{item.isCorrect ? 'detail-correct' : 'detail-wrong'}}"
+        wx:for="{{results}}"
+        wx:key="id"
+      >
+        <view class="detail-left">
+          <view class="detail-status-dot {{item.isCorrect ? 'dot-correct' : 'dot-wrong'}}"></view>
+          <view class="detail-info">
+            <text class="detail-title">{{item.title}}</text>
+            <view class="detail-answers" wx:if="{{!item.isCorrect}}">
+              <text class="my-answer">我的：<text class="wrong-text">{{item.myAnswer}}</text></text>
+              <text class="correct-answer">正确：<text class="correct-text">{{item.correctAnswer}}</text></text>
+            </view>
+          </view>
+        </view>
+        <text class="detail-num">第{{item.num}}题</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-actions">
+    <view class="action-btn btn-retry" bindtap="onRetry">
+      <view class="action-icon-wrap">
+        <van-icon name="replay" size="18px" color="#4F46E5" />
+      </view>
+      <text class="action-label">重新答题</text>
+    </view>
+    <view class="action-btn btn-wrong" bindtap="onViewWrong">
+      <view class="action-icon-wrap wrong-wrap">
+        <van-icon name="warning-o" size="18px" color="#FF6B6B" />
+      </view>
+      <text class="action-label">查看错题</text>
+    </view>
+    <view class="action-btn btn-home" bindtap="onBackHome">
+      <view class="action-icon-wrap gray-wrap">
+        <van-icon name="home-o" size="18px" color="#666" />
+      </view>
+      <text class="action-label">返回首页</text>
+    </view>
+  </view>
+</view>

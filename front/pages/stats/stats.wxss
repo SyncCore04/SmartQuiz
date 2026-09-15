@@ -1,0 +1,198 @@
+.page-container {
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: #f5f3ff;
+  min-height: 100vh;
+}
+
+/* 顶部概览 */
+.stats-header {
+  background: linear-gradient(135deg, #4F46E5, #7C3AED);
+  padding: 40rpx 32rpx 60rpx;
+}
+
+.stats-overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 24rpx;
+  padding: 32rpx 20rpx;
+}
+
+.overview-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overview-num {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 6rpx;
+}
+
+.overview-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.overview-divider {
+  width: 1rpx;
+  height: 64rpx;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 通用section */
+.section {
+  padding: 24rpx 32rpx 0;
+}
+
+.section-title-text {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+/* 柱状图 */
+.chart-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(79, 70, 229, 0.06);
+}
+
+.chart-area {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 260rpx;
+  padding: 20rpx 0;
+}
+
+.chart-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60rpx;
+}
+
+.chart-value {
+  font-size: 20rpx;
+  color: #4F46E5;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.chart-bar {
+  width: 40rpx;
+  border-radius: 20rpx 20rpx 8rpx 8rpx;
+  background: linear-gradient(180deg, #4F46E5, #7C3AED);
+  transition: height 0.3s ease;
+}
+
+.chart-label {
+  font-size: 20rpx;
+  color: #999;
+  margin-top: 12rpx;
+}
+
+/* 最近练习 */
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  padding-bottom: 24rpx;
+}
+
+.record-card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(79, 70, 229, 0.04);
+}
+
+.record-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14rpx;
+}
+
+.record-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.record-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: #4F46E5;
+  flex-shrink: 0;
+}
+
+.record-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1e1b4b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-score-box {
+  display: flex;
+  align-items: baseline;
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.record-score {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #4F46E5;
+}
+
+.record-total {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.record-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.record-date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.record-stats {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  font-size: 22rpx;
+}
+
+.stat-correct {
+  color: #4F46E5;
+  font-weight: 600;
+}
+
+.stat-divider {
+  color: #ddd;
+}
+
+.stat-wrong {
+  color: #EF4444;
+  font-weight: 600;
+}

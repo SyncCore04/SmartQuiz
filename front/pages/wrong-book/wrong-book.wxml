@@ -1,0 +1,52 @@
+<view class="page-container">
+  <!-- 顶部统计 -->
+  <view class="wrong-header">
+    <view class="header-left">
+      <text class="header-title">错题本</text>
+      <text class="header-count">共{{wrongList.length}}道错题</text>
+    </view>
+    <view class="header-icon">
+      <van-icon name="warning-o" size="24px" color="#ffffff" />
+    </view>
+  </view>
+
+  <!-- 错题列表 -->
+  <view class="wrong-list">
+    <view class="wrong-card" wx:for="{{wrongList}}" wx:key="id">
+      <!-- 题目头部 -->
+      <view class="wrong-top">
+        <view class="wrong-num-badge">
+          <text class="num-text">{{item.num}}</text>
+        </view>
+        <text class="wrong-title">{{item.title}}</text>
+      </view>
+
+      <!-- 答案对比 -->
+      <view class="answer-compare">
+        <view class="answer-row my-row">
+          <view class="answer-label-box wrong-bg">
+            <text class="label-text">我的</text>
+          </view>
+          <text class="answer-value wrong-text">{{item.myAnswer}}</text>
+        </view>
+        <view class="answer-row correct-row">
+          <view class="answer-label-box correct-bg">
+            <text class="label-text">正确</text>
+          </view>
+          <text class="answer-value correct-text">{{item.correctAnswer}}</text>
+        </view>
+      </view>
+
+      <!-- 解析 -->
+      <view class="analysis-section">
+        <view class="analysis-header">
+          <view class="analysis-icon">
+            <van-icon name="info-o" size="14px" color="#4F46E5" />
+          </view>
+          <text class="analysis-title">解析</text>
+        </view>
+        <text class="analysis-text">{{item.analysis}}</text>
+      </view>
+    </view>
+  </view>
+</view>

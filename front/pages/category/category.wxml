@@ -1,0 +1,42 @@
+<view class="page-container">
+  <!-- 顶部搜索区 -->
+  <view class="search-header">
+    <view class="search-bar" bindtap="">
+      <van-icon name="search" size="16px" color="#a5b4fc" />
+      <input
+        class="search-input"
+        placeholder="搜索分类..."
+        placeholder-style="color: #a5b4fc"
+        value="{{searchValue}}"
+        bindinput="onSearchInput"
+      />
+    </view>
+  </view>
+
+  <!-- 分类列表 -->
+  <view class="category-list">
+    <view
+      class="category-card"
+      wx:for="{{categories}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onCategoryTap"
+    >
+      <view class="category-accent" style="background: {{item.accentColor}};"></view>
+      <view class="category-icon-box" style="background: {{item.bgColor}};">
+        <van-icon name="{{item.icon}}" size="26px" color="{{item.accentColor}}" />
+      </view>
+      <view class="category-content">
+        <text class="category-name">{{item.name}}</text>
+        <text class="category-desc">{{item.desc}}</text>
+        <view class="category-meta">
+          <text class="category-count">{{item.count}}题</text>
+          <view class="category-enter">
+            <text class="enter-text">进入</text>
+            <van-icon name="arrow" size="12px" color="#4F46E5" />
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

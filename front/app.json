@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/category/category",
+    "pages/question-list/question-list",
+    "pages/answer/answer",
+    "pages/result/result",
+    "pages/exam-list/exam-list",
+    "pages/exam-detail/exam-detail",
+    "pages/wrong-book/wrong-book",
+    "pages/stats/stats",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "在线答题系统",
+    "navigationBarBackgroundColor": "#4F46E5"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#4F46E5",
+    "backgroundColor": "#ffffff",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/exam-list/exam-list", "text": "考试" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

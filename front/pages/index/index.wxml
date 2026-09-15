@@ -1,0 +1,121 @@
+<view class="page-container">
+  <!-- 顶部问候区 -->
+  <view class="header-section">
+    <view class="header-top">
+      <view class="greeting">
+        <text class="greeting-text">Hi，同学</text>
+        <text class="greeting-sub">今天也要加油刷题哦</text>
+      </view>
+      <view class="header-avatar" bindtap="onSearch">
+        <van-icon name="search" size="20px" color="#4F46E5" />
+      </view>
+    </view>
+    <!-- 搜索框 -->
+    <view class="search-bar" bindtap="onSearch">
+      <van-icon name="search" size="16px" color="#a5b4fc" />
+      <text class="search-placeholder">搜索题库、知识点...</text>
+    </view>
+  </view>
+
+  <!-- 学习数据概览 -->
+  <view class="stats-overview">
+    <view class="stat-item">
+      <text class="stat-num">128</text>
+      <text class="stat-label">已做题</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-num">85%</text>
+      <text class="stat-label">正确率</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-num">7</text>
+      <text class="stat-label">连续天数</text>
+    </view>
+  </view>
+
+  <!-- 轮播图 -->
+  <view class="swiper-wrap">
+    <swiper class="swiper-box" autoplay circular interval="4000" indicator-dots indicator-color="rgba(255,255,255,0.3)" indicator-active-color="#ffffff">
+      <swiper-item wx:for="{{swiperList}}" wx:key="id">
+        <image class="swiper-img" src="{{item.image}}" mode="aspectFill" />
+        <view class="swiper-mask">
+          <text class="swiper-title">{{item.title}}</text>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 分类入口 -->
+  <view class="section">
+    <view class="section-title-row">
+      <text class="section-title-text">题库分类</text>
+      <text class="section-more" bindtap="onSearch">全部 ></text>
+    </view>
+    <view class="category-grid">
+      <view class="category-item" wx:for="{{categories}}" wx:key="id" data-id="{{item.id}}" bindtap="onCategoryTap">
+        <view class="category-icon-wrap" style="background: {{item.bgColor}};">
+          <van-icon name="{{item.icon}}" size="26px" color="{{item.color}}" />
+        </view>
+        <text class="category-name">{{item.name}}</text>
+        <text class="category-count">{{item.count}}题</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 公告栏 -->
+  <view class="notice-bar">
+    <view class="notice-icon-wrap">
+      <van-icon name="volume-o" size="14px" color="#4F46E5" />
+    </view>
+    <text class="notice-text">{{notice}}</text>
+  </view>
+
+  <!-- 热门题库 -->
+  <view class="section">
+    <view class="section-title-row">
+      <text class="section-title-text">热门题库</text>
+      <text class="section-more">查看更多 ></text>
+    </view>
+    <scroll-view class="hot-scroll" scroll-x enable-flex>
+      <view class="hot-card" wx:for="{{hotBanks}}" wx:key="id" data-id="{{item.id}}" bindtap="onHotBankTap">
+        <view class="hot-card-img-wrap">
+          <image class="hot-card-img" src="{{item.image}}" mode="aspectFill" />
+          <view class="hot-card-tag" wx:if="{{item.tag}}">{{item.tag}}</view>
+        </view>
+        <view class="hot-card-info">
+          <text class="hot-card-title">{{item.title}}</text>
+          <text class="hot-card-desc">{{item.desc}}</text>
+          <view class="hot-card-footer">
+            <text class="hot-card-count">{{item.count}}道题</text>
+            <text class="hot-card-joined">{{item.joined}}人练习</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 最近练习 -->
+  <view class="section">
+    <view class="section-title-row">
+      <text class="section-title-text">最近练习</text>
+      <text class="section-more">全部 ></text>
+    </view>
+    <view class="recent-list">
+      <view class="recent-item" wx:for="{{recentPractices}}" wx:key="id" bindtap="onPracticeTap">
+        <view class="recent-icon-wrap" style="background: {{item.bgColor}};">
+          <van-icon name="{{item.icon}}" size="18px" color="{{item.iconColor}}" />
+        </view>
+        <view class="recent-left">
+          <text class="recent-title">{{item.title}}</text>
+          <text class="recent-date">{{item.date}}</text>
+        </view>
+        <view class="recent-score">
+          <text class="score-num">{{item.score}}</text>
+          <text class="score-total">/{{item.total}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

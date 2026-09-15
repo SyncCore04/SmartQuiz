@@ -1,0 +1,281 @@
+.page-container {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 140rpx);
+  background-color: #f5f3ff;
+  min-height: 100vh;
+}
+
+/* 封面区域 */
+.cover-section {
+  position: relative;
+  width: 100%;
+  height: 360rpx;
+}
+
+.exam-cover {
+  width: 100%;
+  height: 100%;
+}
+
+.cover-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32rpx;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+}
+
+.cover-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+/* 信息网格 */
+.info-grid {
+  display: flex;
+  gap: 16rpx;
+  margin: -40rpx 32rpx 24rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.info-card {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 20rpx 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8rpx 24rpx rgba(79, 70, 229, 0.08);
+}
+
+.info-icon-wrap {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 18rpx;
+  background: #ede9fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10rpx;
+}
+
+.info-icon-wrap.pink {
+  background: #fce7f3;
+}
+
+.info-icon-wrap.amber {
+  background: #fef3c7;
+}
+
+.info-icon-wrap.green {
+  background: #d1fae5;
+}
+
+.info-value {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin-bottom: 4rpx;
+}
+
+.info-label {
+  font-size: 20rpx;
+  color: #999;
+}
+
+/* 通用section */
+.section {
+  margin: 0 32rpx 28rpx;
+}
+
+.section-title-text {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+/* 题型分布 */
+.section-list {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 8rpx 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(79, 70, 229, 0.04);
+}
+
+.section-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f3ff;
+}
+
+.section-item:last-child {
+  border-bottom: none;
+}
+
+.section-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.section-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: #4F46E5;
+}
+
+.section-name {
+  font-size: 28rpx;
+  color: #1e1b4b;
+  font-weight: 600;
+}
+
+.section-right {
+  display: flex;
+  gap: 20rpx;
+}
+
+.section-count {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.section-score {
+  font-size: 26rpx;
+  color: #4F46E5;
+  font-weight: 600;
+}
+
+/* 考试规则 */
+.rules-list {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(79, 70, 229, 0.04);
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.rule-item:last-child {
+  margin-bottom: 0;
+}
+
+.rule-num {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 10rpx;
+  background: #ede9fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #4F46E5;
+  font-weight: 700;
+  margin-right: 14rpx;
+  flex-shrink: 0;
+}
+
+.rule-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  padding-top: 4rpx;
+}
+
+/* 历史成绩 */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(79, 70, 229, 0.04);
+}
+
+.history-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-time {
+  font-size: 28rpx;
+  color: #1e1b4b;
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}
+
+.history-rank {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.history-score-box {
+  display: flex;
+  align-items: baseline;
+}
+
+.history-score-num {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #4F46E5;
+}
+
+.history-score-total {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 开始按钮 */
+.start-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 32rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 20rpx);
+  background: #ffffff;
+  box-shadow: 0 -4rpx 16rpx rgba(79, 70, 229, 0.06);
+}
+
+.start-btn {
+  height: 96rpx;
+  border-radius: 48rpx;
+  background: linear-gradient(135deg, #4F46E5, #7C3AED);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(79, 70, 229, 0.3);
+}
+
+.start-text {
+  color: #ffffff;
+  font-size: 34rpx;
+  font-weight: 700;
+}

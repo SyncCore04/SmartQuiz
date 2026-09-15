@@ -1,0 +1,62 @@
+<view class="page-container">
+  <!-- 顶部概览 -->
+  <view class="stats-header">
+    <view class="stats-overview">
+      <view class="overview-item">
+        <text class="overview-num">{{totalQuestions}}</text>
+        <text class="overview-label">总答题数</text>
+      </view>
+      <view class="overview-divider"></view>
+      <view class="overview-item">
+        <text class="overview-num">{{accuracy}}</text>
+        <text class="overview-label">正确率</text>
+      </view>
+      <view class="overview-divider"></view>
+      <view class="overview-item">
+        <text class="overview-num">{{streakDays}}</text>
+        <text class="overview-label">连续天数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 本周答题量 -->
+  <view class="section">
+    <text class="section-title-text">本周答题量</text>
+    <view class="chart-card">
+      <view class="chart-area">
+        <view class="chart-bar-group" wx:for="{{weeklyData}}" wx:key="day">
+          <text class="chart-value">{{item.value}}</text>
+          <view class="chart-bar" style="height: {{item.height}}rpx;"></view>
+          <text class="chart-label">{{item.day}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近练习 -->
+  <view class="section">
+    <text class="section-title-text">最近练习</text>
+    <view class="record-list">
+      <view class="record-card" wx:for="{{recentRecords}}" wx:key="id">
+        <view class="record-top">
+          <view class="record-title-wrap">
+            <view class="record-dot"></view>
+            <text class="record-title">{{item.title}}</text>
+          </view>
+          <view class="record-score-box">
+            <text class="record-score">{{item.score}}</text>
+            <text class="record-total">分</text>
+          </view>
+        </view>
+        <view class="record-bottom">
+          <text class="record-date">{{item.date}}</text>
+          <view class="record-stats">
+            <text class="stat-correct">对{{item.correct}}</text>
+            <text class="stat-divider">/</text>
+            <text class="stat-wrong">错{{item.wrong}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

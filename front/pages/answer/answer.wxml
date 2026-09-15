@@ -1,0 +1,62 @@
+<view class="page-container">
+  <!-- 顶部进度条 -->
+  <view class="progress-header">
+    <view class="progress-info">
+      <text class="progress-label">{{currentIndex + 1}} / {{questions.length}}</text>
+      <text class="progress-type">{{questions[currentIndex].type}}题</text>
+    </view>
+    <view class="progress-bar-bg">
+      <view class="progress-bar-fill" style="width: {{(currentIndex + 1) / questions.length * 100}}%;"></view>
+    </view>
+  </view>
+
+  <!-- 题目区域 -->
+  <view class="question-section">
+    <view class="question-num-badge">
+      <text class="badge-text">Q{{currentIndex + 1}}</text>
+    </view>
+    <text class="question-title">{{questions[currentIndex].title}}</text>
+  </view>
+
+  <!-- 选项列表 -->
+  <view class="options-list">
+    <view
+      class="option-card {{item.selected ? 'option-selected' : ''}}"
+      wx:for="{{questions[currentIndex].options}}"
+      wx:key="key"
+      data-qindex="{{currentIndex}}"
+      data-oindex="{{index}}"
+      bindtap="onOptionTap"
+    >
+      <view class="option-key-box {{item.selected ? 'key-active' : ''}}">
+        <text class="key-text">{{item.key}}</text>
+      </view>
+      <text class="option-text">{{item.text}}</text>
+      <view class="option-check" wx:if="{{item.selected}}">
+        <van-icon name="success" size="16px" color="#4F46E5" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <scroll-view class="nav-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="nav-list">
+        <view
+          class="nav-dot {{index === currentIndex ? 'nav-current' : ''}}"
+          wx:for="{{questions}}"
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onQuestionNav"
+        >
+          <text class="nav-num">{{index + 1}}</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="submit-area">
+      <view class="submit-btn" bindtap="onSubmit">
+        <text class="submit-text">提交答案</text>
+      </view>
+    </view>
+  </view>
+</view>

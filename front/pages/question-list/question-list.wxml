@@ -1,0 +1,50 @@
+<view class="page-container">
+  <!-- 顶部筛选区 -->
+  <view class="filter-header">
+    <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="filter-list">
+        <view
+          class="filter-tab {{activeFilter === item.key ? 'filter-active' : ''}}"
+          wx:for="{{filters}}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          bindtap="onFilterTap"
+        >
+          <text class="filter-text">{{item.label}}</text>
+          <view class="filter-dot" wx:if="{{activeFilter === item.key}}"></view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 题目列表 -->
+  <view class="question-list">
+    <view
+      class="question-card"
+      wx:for="{{questions}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onQuestionTap"
+    >
+      <view class="question-number">
+        <text class="num-text">{{item.num}}</text>
+      </view>
+      <view class="question-body">
+        <view class="question-tags">
+          <text class="tag-type">{{item.type}}</text>
+          <view class="diff-bar">
+            <view class="diff-segment {{item.difficulty === '简单' ? 'diff-easy' : item.difficulty === '中等' ? 'diff-mid' : 'diff-hard'}}"></view>
+            <text class="diff-label">{{item.difficulty}}</text>
+          </view>
+        </view>
+        <text class="question-title">{{item.title}}</text>
+        <text class="question-options" wx:if="{{item.options}}">{{item.options}}</text>
+      </view>
+      <view class="question-action">
+        <view class="action-btn">
+          <van-icon name="arrow" size="14px" color="#4F46E5" />
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

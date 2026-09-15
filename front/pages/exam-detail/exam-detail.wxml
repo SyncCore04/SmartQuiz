@@ -1,0 +1,95 @@
+<view class="page-container">
+  <!-- 封面区域 -->
+  <view class="cover-section">
+    <image class="exam-cover" src="{{exam.cover}}" mode="aspectFill" />
+    <view class="cover-overlay">
+      <text class="cover-title">{{exam.title}}</text>
+    </view>
+  </view>
+
+  <!-- 信息网格 -->
+  <view class="info-grid">
+    <view class="info-card">
+      <view class="info-icon-wrap">
+        <van-icon name="clock-o" size="20px" color="#4F46E5" />
+      </view>
+      <text class="info-value">{{exam.time}}</text>
+      <text class="info-label">考试时间</text>
+    </view>
+    <view class="info-card">
+      <view class="info-icon-wrap pink">
+        <van-icon name="todo-list-o" size="20px" color="#EC4899" />
+      </view>
+      <text class="info-value">{{exam.totalCount}}题</text>
+      <text class="info-label">题目数量</text>
+    </view>
+    <view class="info-card">
+      <view class="info-icon-wrap amber">
+        <van-icon name="medel-o" size="20px" color="#F59E0B" />
+      </view>
+      <text class="info-value">{{exam.totalScore}}分</text>
+      <text class="info-label">总分</text>
+    </view>
+    <view class="info-card">
+      <view class="info-icon-wrap green">
+        <van-icon name="friends-o" size="20px" color="#10B981" />
+      </view>
+      <text class="info-value">{{exam.joined}}人</text>
+      <text class="info-label">已参加</text>
+    </view>
+  </view>
+
+  <!-- 题型分布 -->
+  <view class="section">
+    <text class="section-title-text">题型分布</text>
+    <view class="section-list">
+      <view class="section-item" wx:for="{{exam.sections}}" wx:key="name">
+        <view class="section-name-wrap">
+          <view class="section-dot"></view>
+          <text class="section-name">{{item.name}}</text>
+        </view>
+        <view class="section-right">
+          <text class="section-count">{{item.count}}题</text>
+          <text class="section-score">{{item.score}}分</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 考试规则 -->
+  <view class="section">
+    <text class="section-title-text">考试规则</text>
+    <view class="rules-list">
+      <view class="rule-item" wx:for="{{exam.rules}}" wx:key="index">
+        <view class="rule-num">{{index + 1}}</view>
+        <text class="rule-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史成绩 -->
+  <view class="section">
+    <view class="section-title-row">
+      <text class="section-title-text">历史成绩</text>
+    </view>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{historyScores}}" wx:key="time">
+        <view class="history-left">
+          <text class="history-time">{{item.time}}</text>
+          <text class="history-rank">排名 第{{item.rank}}名</text>
+        </view>
+        <view class="history-score-box">
+          <text class="history-score-num">{{item.score}}</text>
+          <text class="history-score-total">/{{item.total}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 开始考试按钮 -->
+  <view class="start-area">
+    <view class="start-btn" bindtap="onStartExam">
+      <text class="start-text">开始考试</text>
+    </view>
+  </view>
+</view>

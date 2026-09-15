@@ -1,0 +1,50 @@
+<view class="page-container">
+  <!-- 顶部标题 -->
+  <view class="page-header">
+    <text class="header-title">考试中心</text>
+    <text class="header-sub">在线模拟，真实体验</text>
+  </view>
+
+  <!-- 考试卡片列表 -->
+  <view class="exam-list">
+    <view
+      class="exam-card"
+      wx:for="{{exams}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onExamTap"
+    >
+      <view class="exam-cover-wrap">
+        <image class="exam-cover" src="{{item.cover}}" mode="aspectFill" />
+        <view class="exam-status-pill" style="background: {{item.statusColor}};">
+          <text class="status-text">{{item.status}}</text>
+        </view>
+        <view class="exam-cover-mask"></view>
+      </view>
+      <view class="exam-body">
+        <text class="exam-title">{{item.title}}</text>
+        <view class="exam-meta-row">
+          <view class="meta-chip">
+            <van-icon name="clock-o" size="13px" color="#4F46E5" />
+            <text class="meta-text">{{item.duration}}</text>
+          </view>
+          <view class="meta-chip">
+            <van-icon name="notes-o" size="13px" color="#4F46E5" />
+            <text class="meta-text">{{item.totalCount}}题</text>
+          </view>
+          <view class="meta-chip">
+            <van-icon name="friends-o" size="13px" color="#4F46E5" />
+            <text class="meta-text">{{item.joined}}人</text>
+          </view>
+        </view>
+        <view class="exam-footer-row">
+          <text class="exam-date">{{item.date}}</text>
+          <view class="exam-enter-btn">
+            <text class="enter-text">查看详情</text>
+            <van-icon name="arrow" size="12px" color="#ffffff" />
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
