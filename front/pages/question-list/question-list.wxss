@@ -15,11 +15,13 @@
 }
 
 .filter-scroll {
+  width: 100%;
   white-space: nowrap;
 }
 
 .filter-list {
-  display: flex;
+  /* inline-flex 让宽度随标签数量撑开，保证超出一屏时可横向滚动 */
+  display: inline-flex;
   gap: 12rpx;
 }
 

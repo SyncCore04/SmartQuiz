@@ -157,13 +157,16 @@
 }
 
 .nav-scroll {
+  width: 100%;
   margin-bottom: 20rpx;
   white-space: nowrap;
 }
 
 .nav-list {
-  display: flex;
-  justify-content: center;
+  /* 必须用 inline-flex：宽度由全部题号撑开，scroll-view 才能横向滚动；
+     不能用 flex + justify-content:center，否则内容只占一屏宽，
+     两侧溢出的题号（如第1-3题）将无法滚动到达 */
+  display: inline-flex;
   gap: 12rpx;
 }
 
