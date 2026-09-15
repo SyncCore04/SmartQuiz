@@ -10,9 +10,17 @@
 ```
 SmartQuiz/
 ├── front/           微信小程序前端（本项目不改动）
-├── backend/         本后端代码：app.py / requirements.txt / README.md
+├── backend/         本后端代码：app.py / questions_data.py / requirements.txt / README.md
 └── database/        SQLite 数据库文件 smartquiz.db（首次启动自动生成）
 ```
+
+## 题库维护（重点）
+题目统一存放在 **`questions_data.py`**（独立数据文件），与后端逻辑分离，加题只需改这一个文件，不改代码。
+- 每题一行 `(分类名, 题型key, 难度, 题干, 选项, 答案, 解析)`
+- 分类名 ∈ `语文/数学/英语/理综`；题型key ∈ `single(单选)/multi(多选)/judge(判断)/fill(填空)`
+- 选项格式 `A. x B. y C. z D. w`；判断题 `A. 正确 B. 错误`；填空题选项留空、答案直接填文本
+- 难度 ∈ `简单/中等/困难`
+- 加题后若数据库已存在，需删除 `database/smartquiz.db` 再启动才会重新灌入新题（旧答题记录会一并清空）；全新部署会自动全量注入。
 
 ## 快速开始
 1. 安装依赖（已装 Flask 可跳过）：

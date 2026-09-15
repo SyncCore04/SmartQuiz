@@ -4,14 +4,18 @@
 用于「在线答题系统」微信小程序（期末设计作业）
 启动：python app.py  （首次运行会自动建库、建表并灌入种子数据）
 数据库文件：SmartQuiz/database/smartquiz.db
+
+题库扩充：题目统一维护在 questions_data.py（独立数据文件），
+          seed_data() 从此文件读取灌库，如需加题只需改数据文件。
 """
 import os
-import json
 import sqlite3
 import random
 from datetime import datetime, date, timedelta
 
 from flask import Flask, request, jsonify
+
+from questions_data import QUESTIONS
 
 app = Flask(__name__)
 
@@ -156,100 +160,24 @@ def seed_data():
     cat_map = {row["id"]: row for row in c.execute("SELECT * FROM category").fetchall()}
     cat_by_name = {r["name"]: r["id"] for r in cat_map.values()}
 
-    # 题目：type / type_key / difficulty / title / options_text / answer / analysis / category
-    # 以下前 10 题为「答题页 answer.js」中的原题，并补全正确答案与解析
-    questions = [
-        (cat_by_name["语文"], "单选", "single", "简单",
-         "下列词语中，没有错别字的一组是？",
-         "A. 鬼鬼祟祟 B. 再接再厉 C. 金壁辉煌 D. 哀声叹气", "B",
-         "金壁辉煌应为金碧辉煌，哀声叹气应为唉声叹气，故选B。"),
-        (cat_by_name["数学"], "单选", "single", "困难",
-         "已知函数 f(x) = x³ - 3x + 1，则 f(x) 的极小值为？",
-         "A. -1 B. 3 C. -3 D. 1", "A",
-         "f'(x)=3x²-3，令其=0得x=±1，x=1处取极小值，f(1)=1-3+1=-1。"),
-        (cat_by_name["英语"], "单选", "single", "中等",
-         "The teacher asked us to ______ the homework before Friday.",
-         "A. finish B. finishing C. finished D. finishes", "A",
-         "ask sb. to do sth.，to 后接动词原形 finish。"),
-        (cat_by_name["语文"], "单选", "single", "中等",
-         "下列文学作品与其作者对应正确的是？",
-         "A. 《红楼梦》-施耐庵 B. 《西游记》-吴承恩 C. 《三国演义》-曹雪芹 D. 《水浒传》-罗贯中", "B",
-         "《西游记》作者是吴承恩；红楼梦-曹雪芹、三国演义-罗贯中、水浒传-施耐庵。"),
-        (cat_by_name["理综"], "单选", "single", "简单",
-         "地球是太阳系中最大的行星。此说法是否正确？",
-         "A. 正确 B. 错误 C. 不确定 D. 以上都不对", "B",
-         "太阳系最大的行星是木星，地球并非最大。"),
-        (cat_by_name["理综"], "单选", "single", "简单",
-         "水在标准大气压下的沸点是多少？",
-         "A. 90°C B. 100°C C. 110°C D. 120°C", "B",
-         "标准大气压下水的沸点为 100°C。"),
-        (cat_by_name["理综"], "单选", "single", "简单",
-         "光合作用主要发生在植物的哪个部位？",
-         "A. 根部 B. 茎部 C. 叶片 D. 花朵", "C",
-         "光合作用主要发生在叶片的叶绿体中。"),
-        (cat_by_name["理综"], "单选", "single", "中等",
-         "化学反应 2H₂ + O₂ → 2H₂O 中，生成物是什么？",
-         "A. 氢气 B. 氧气 C. 水 D. 二氧化碳", "C",
-         "反应右边为 2H₂O，即生成物是水。"),
-        (cat_by_name["语文"], "单选", "single", "简单",
-         "唐朝的开国皇帝是谁？",
-         "A. 李世民 B. 李渊 C. 李隆基 D. 武则天", "B",
-         "唐朝开国皇帝是李渊（唐高祖），李世民是第二任皇帝。"),
-        (cat_by_name["理综"], "单选", "single", "中等",
-         "赤道是地球上最长的纬线，它的周长约为？",
-         "A. 2万公里 B. 4万公里 C. 6万公里 D. 8万公里", "B",
-         "赤道周长约 4 万公里。"),
-        # 补充的多选
-        (cat_by_name["理综"], "多选", "multi", "困难",
-         "下列关于光合作用的叙述，正确的是？",
-         "A. 光反应在叶绿体类囊体薄膜上进行 B. 暗反应在叶绿体基质中进行 C. 光反应产生二氧化碳 D. 暗反应需要光照", "AB",
-         "光反应在类囊体薄膜，暗反应在基质；光反应产生氧气并非二氧化碳，暗反应不需要光照。"),
-        (cat_by_name["数学"], "多选", "multi", "困难",
-         "下列不等式中，恒成立的是？",
-         "A. x²≥0 B. (x-1)²≥0 C. |x|+x≥0 D. x²+x+1<0", "ABC",
-         "x²与(x-1)²都非负，|x|+x≥0 恒成立；x²+x+1=(x+1/2)²+3/4>0 恒大于0，故D错误。"),
-        # 补充的判断
-        (cat_by_name["理综"], "判断", "judge", "简单",
-         "水在标准大气压下的沸点是 100°C。",
-         "A. 正确 B. 错误", "A",
-         "标准大气压下水的沸点为 100°C，说法正确。"),
-        (cat_by_name["理综"], "判断", "judge", "简单",
-         "地球是太阳系中最大的行星。",
-         "A. 正确 B. 错误", "B",
-         "太阳系最大行星是木星。"),
-        # 补充的填空
-        (cat_by_name["数学"], "填空", "fill", "中等",
-         "等差数列前 n 项和公式 Sn=______。",
-         "", "Sn=n(a1+an)/2",
-         "等差数列前n项和 Sn=n(a1+an)/2=na1+n(n-1)d/2。"),
-        (cat_by_name["英语"], "填空", "fill", "中等",
-         "The teacher asked us to ______ (完成) the homework before Friday.",
-         "", "finish",
-         "ask sb. to do sth.，空格处应填动词原形 finish。"),
-        # 错题本中的补充题
-        (cat_by_name["理综"], "单选", "single", "中等",
-         "下列哪个不属于三大合成材料？",
-         "A. 塑料 B. 合成纤维 C. 陶瓷 D. 合成橡胶", "C",
-         "三大合成材料是塑料、合成纤维、合成橡胶；陶瓷属于无机非金属材料，不属于合成材料。"),
-        (cat_by_name["英语"], "单选", "single", "中等",
-         "The news ______ very exciting.",
-         "A. is B. are C. were D. be", "A",
-         "news 是不可数名词，谓语动词用单数 is。"),
-        (cat_by_name["理综"], "判断", "judge", "简单",
-         "地球自转一周需要 24 小时。",
-         "A. 正确 B. 错误", "A",
-         "地球自转一周约 24 小时（23 小时 56 分 4 秒）。"),
-    ]
+    # 题目来源：统一从独立题库 questions_data.py 读取（见文件顶部说明）
+    # 每题：(分类名, 题型key, 难度, 题干, 选项, 答案, 解析)
+    # 分类名 -> 分类id、题型key -> 中文题型 在此映射
+    type_display = {"single": "单选", "multi": "多选", "judge": "判断", "fill": "填空"}
     qid_by_ord = {}
-    for ord_no, (cid, t, tk, d, title, opt, ans, ana) in enumerate(questions, start=1):
+    for ord_no, (cat_name, tk, diff, title, opt, ans, ana) in enumerate(QUESTIONS, start=1):
+        cid = cat_by_name.get(cat_name)
         cur = c.execute(
             "INSERT INTO question(category_id,type,type_key,difficulty,title,options_text,answer,analysis) "
-            "VALUES(?,?,?,?,?,?,?,?)", (cid, t, tk, d, title, opt, ans, ana))
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (cid, type_display[tk], tk, diff, title, opt, ans, ana))
         qid_by_ord[ord_no] = cur.lastrowid
 
     # 更新每个分类的题目数量 count
-    for row in c.execute("SELECT category_id, COUNT(*) AS n FROM question GROUP BY category_id"):
-        c.execute("UPDATE category SET count=? WHERE id=?", (row["n"], row["category_id"]))
+    # 注意：先把 SELECT 结果 fetchall 取完，再执行 UPDATE；
+    #       否则同一个游标在迭代中执行 UPDATE 会打断遍历，只更新第一行。
+    for ci, cn in c.execute("SELECT category_id, COUNT(*) AS n FROM question GROUP BY category_id").fetchall():
+        c.execute("UPDATE category SET count=? WHERE id=?", (cn, ci))
 
     # 热门题库（复用前端首页 hotBanks）
     banks = [
@@ -609,4 +537,5 @@ if __name__ == "__main__":
     init_db()
     print("数据库文件：", DB_PATH)
     print("服务启动：http://127.0.0.1:5000")
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # debug=False：避免 Flask reloader 常驻双进程、残留多个实例导致端口/缓存错乱
+    app.run(host="0.0.0.0", port=5000, debug=False)

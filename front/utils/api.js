@@ -30,10 +30,13 @@ function login(nickname = '清和学长') {
   })
 }
 
-// 确保已有用户身份，没有则自动登录
+// 确保已有用户身份。
+// 始终向后端发起一次幂等登录：后端按 nickname 复用同一用户，
+// 因此能拿到当前库中最新有效的 user_id，避免本地缓存过期导致取不到数据。
 function ensureUser() {
   const u = wx.getStorageSync(USER_KEY)
-  return (u && u.user_id) ? Promise.resolve(u) : login()
+  const nickname = (u && u.nickname) ? u.nickname : '清和学长'
+  return login(nickname)
 }
 
 // 获取当前 user_id（可能为空，需先 ensureUser）
