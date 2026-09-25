@@ -22,3 +22,11 @@ Thumbs.db
 
 # ---------- 微信开发者工具个人配置（保留 project.config.json 公共配置） ----------
 front/project.private.config.json
+
+# ---------- docs ----------
+docs/backend-learning/
+docs/期末答辩学习文档.md
+docs/*.docx
+
+# ---------- 其他 ----------
+所需环境.txt
