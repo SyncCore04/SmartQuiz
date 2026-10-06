@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %}数据看板{% endblock %}
+{% block page_title %}数据看板{% endblock %}
+
+{% block content %}
+
+<!-- ==================== 核心指标 ==================== -->
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">用户数</div>
+    <div class="stat-value">{{ stats.user_count }}</div>
+    <div class="stat-hint">小程序端游客账号</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">题目总数</div>
+    <div class="stat-value">{{ stats.question_count }}</div>
+    <div class="stat-hint">{{ stats.category_count }} 个学科分类</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">累计答题题次</div>
+    <div class="stat-value">{{ stats.answer_total }}</div>
+    <div class="stat-hint">共 {{ stats.record_count }} 次提交</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">总体正确率</div>
+    <div class="stat-value">{{ stats.accuracy }}</div>
+    <div class="stat-hint">基于全部答题记录</div>
+  </div>
+</div>
+
+<div class="grid-2">
+
+  <!-- ==================== 分类题目分布 ==================== -->
+  <div class="card">
+    <div class="card-head">
+      <h2>学科分类题目分布</h2>
+      <span class="spacer"></span>
+      <a class="btn btn-sm" href="{{ url_for('question.index') }}">管理题目</a>
+    </div>
+    <div class="card-body">
+      {% if category_bars %}
+      <div class="bar-chart">
+        {% for bar in category_bars %}
+        <div class="bar-col">
+          <span class="bar-value">{{ bar.n }}</span>
+          <div class="bar" style="height: {{ bar.height }}%"></div>
+          <span class="bar-label">{{ bar.name }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty"><strong>暂无分类数据</strong>请先在「学科分类」中创建分类</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ==================== 题型分布 + 其他数据 ==================== -->
+  <div class="card">
+    <div class="card-head"><h2>题型分布</h2></div>
+    <div class="card-body">
+      {% if type_rows %}
+        {% for row in type_rows %}
+        <div class="mini-row">
+          <span class="mini-label">{{ row.type }}</span>
+          <span class="mini-value">{{ row.n }} 题</span>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty">暂无题目</div>
+      {% endif %}
+
+      <div class="mini-row" style="margin-top:10px;">
+        <span class="mini-label">错题累计</span>
+        <span class="mini-value">{{ stats.wrong_count }} 条</span>
+      </div>
+      <div class="mini-row">
+        <span class="mini-label">热门题库</span>
+        <span class="mini-value">{{ stats.bank_count }} 个</span>
+      </div>
+      <div class="mini-row">
+        <span class="mini-label">模拟考试</span>
+        <span class="mini-value">{{ stats.exam_count }} 场</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 最近答题记录 ==================== -->
+<div class="card">
+  <div class="card-head">
+    <h2>最近答题记录</h2>
+    <span class="spacer"></span>
+    <a class="btn btn-sm" href="{{ url_for('user.index') }}">查看全部</a>
+  </div>
+
+  {% if recent_records %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>用户</th>
+          <th>练习标题</th>
+          <th class="nowrap">得分</th>
+          <th class="nowrap">对 / 错</th>
+          <th class="nowrap">日期</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in recent_records %}
+        <tr>
+          <td class="nowrap">{{ r.nickname or '—' }}</td>
+          <td class="cell-title"><span class="ellipsis">{{ r.title }}</span></td>
+          <td class="nowrap"><span class="badge {% if r.score >= 60 %}badge-green{% else %}badge-red{% endif %}">{{ r.score|round|int }} 分</span></td>
+          <td class="nowrap">{{ r.correct }} / {{ r.wrong }}</td>
+          <td class="nowrap">{{ r.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty">
+    <strong>还没有答题记录</strong>
+    在小程序端提交一次练习后，这里会实时出现数据
+  </div>
+  {% endif %}
+</div>
+
+<!-- ==================== 快捷入口 ==================== -->
+<div class="card">
+  <div class="card-head"><h2>快捷入口</h2></div>
+  <div class="card-body" style="display:flex; flex-wrap:wrap; gap:10px;">
+    <a class="btn btn-primary" href="{{ url_for('question.create') }}">新增题目</a>
+    <a class="btn" href="{{ url_for('question.index') }}">题目管理</a>
+    <a class="btn" href="{{ url_for('taxonomy.category_list') }}">学科分类</a>
+    <a class="btn" href="{{ url_for('taxonomy.bank_list') }}">热门题库</a>
+    <a class="btn" href="{{ url_for('taxonomy.exam_list') }}">模拟考试</a>
+    <a class="btn" href="{{ url_for('user.index') }}">用户与记录</a>
+    <a class="btn" href="{{ url_for('swiper.index') }}">首页轮播图</a>
+  </div>
+</div>
+
+{% endblock %}

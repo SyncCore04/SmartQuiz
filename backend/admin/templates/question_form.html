@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}{{ '编辑题目' if question else '新增题目' }}{% endblock %}
+{% block page_title %}{{ '编辑题目 #' ~ question.id if question else '新增题目' }}{% endblock %}
+
+{% block content %}
+
+{% if errors %}
+<div class="alert alert-error">
+  <div>请修正以下问题后再保存：</div>
+  <ul style="margin:6px 0 0; padding-left:20px;">
+    {% for e in errors %}<li>{{ e }}</li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<form method="post">
+
+  <!-- ==================== 基本信息 ==================== -->
+  <div class="card">
+    <div class="card-head"><h2>基本信息</h2></div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="category_id">学科分类 <span class="req">*</span></label>
+          <select class="form-control" id="category_id" name="category_id" required>
+            <option value="">请选择</option>
+            {% for c in categories %}
+            <option value="{{ c.id }}" {% if form.category_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="type_key">题型 <span class="req">*</span></label>
+          <select class="form-control" id="type_key" name="type_key" required>
+            {% for key, label in type_display.items() %}
+            <option value="{{ key }}" {% if form.type_key == key %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="difficulty">难度 <span class="req">*</span></label>
+          <select class="form-control" id="difficulty" name="difficulty" required>
+            {% for d in difficulties %}
+            <option value="{{ d }}" {% if form.difficulty == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="title">题干 <span class="req">*</span></label>
+        <textarea class="form-control" id="title" name="title" rows="3" required
+                  placeholder="请输入题目内容">{{ form.title }}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 选项 ==================== -->
+  <div class="card" id="optionsBox">
+    <div class="card-head">
+      <h2>选项</h2>
+      <span class="hint">选择题至少填 2 项且需从 A 起连续填写；判断题固定为「正确 / 错误」</span>
+    </div>
+    <div class="card-body">
+      {% for letter in option_letters %}
+      <div class="option-row">
+        <span class="option-letter">{{ letter }}</span>
+        <input class="form-control" type="text" name="option_{{ letter }}"
+               data-option-input="{{ letter }}"
+               value="{{ form.options.get(letter, '') }}"
+               placeholder="选项 {{ letter }} 的内容">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ==================== 答案与解析 ==================== -->
+  <div class="card">
+    <div class="card-head"><h2>答案与解析</h2></div>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="answerInput">正确答案 <span class="req">*</span></label>
+        <div class="answer-picker" id="answerPicker">
+          {% for letter in option_letters %}
+          <button type="button" class="letter-chip" data-letter="{{ letter }}">{{ letter }}</button>
+          {% endfor %}
+        </div>
+        <input class="form-control" type="text" id="answerInput" name="answer"
+               value="{{ form.answer }}" placeholder="点击上方字母选择，或直接输入">
+        <div class="form-hint" id="answerHint"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="analysis">答案解析</label>
+        <textarea class="form-control" id="analysis" name="analysis" rows="3"
+                  placeholder="选填。会展示在小程序「错题本」中，建议填写">{{ form.analysis }}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 操作 ==================== -->
+  <div class="card">
+    <div class="card-body">
+      <div class="form-actions" style="border-top:none; padding-top:0;">
+        <button class="btn btn-primary" type="submit">保存</button>
+        <a class="btn" href="{{ back_url }}">返回列表</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

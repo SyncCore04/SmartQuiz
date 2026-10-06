@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}学科分类{% endblock %}
+{% block page_title %}学科分类{% endblock %}
+
+{% block content %}
+
+<!-- ==================== 新增 / 编辑 ==================== -->
+<div class="card">
+  <div class="card-head">
+    <h2>{{ '编辑分类：' ~ editing.name if editing else '新增分类' }}</h2>
+    <span class="hint">分类会显示在小程序首页的宫格中，配色用于图标与底色</span>
+  </div>
+  <div class="card-body">
+    <form method="post" action="{{ url_for('taxonomy.category_save') }}">
+      {% if editing %}<input type="hidden" name="id" value="{{ editing.id }}">{% endif %}
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">分类名称 <span class="req">*</span></label>
+          <input class="form-control" type="text" id="name" name="name" required
+                 value="{{ editing.name if editing else '' }}" placeholder="例如：语文">
+        </div>
+
+        <div class="form-group">
+          <label for="icon">图标名</label>
+          <input class="form-control" type="text" id="icon" name="icon"
+                 value="{{ editing.icon if editing else '' }}" placeholder="例如：notes-o">
+          <div class="form-hint">用的是 Vant Weapp 图标名，如 notes-o / chart-trending-o / comment-o / points</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="color">主色</label>
+          <input class="form-control" type="text" id="color" name="color"
+                 value="{{ editing.color if editing else '' }}" placeholder="#4F46E5">
+          <div class="form-hint">图标颜色，形如 #4F46E5</div>
+        </div>
+
+        <div class="form-group">
+          <label for="bg_color">底色</label>
+          <input class="form-control" type="text" id="bg_color" name="bg_color"
+                 value="{{ editing.bg_color if editing else '' }}" placeholder="#ede9fe">
+          <div class="form-hint">图标背景色，建议用主色的浅色调</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">{{ '保存修改' if editing else '新增分类' }}</button>
+        {% if editing %}
+        <a class="btn" href="{{ url_for('taxonomy.category_list') }}">取消编辑</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== 列表 ==================== -->
+<div class="card">
+  <div class="card-head">
+    <h2>分类列表</h2>
+    <span class="hint">共 {{ categories|length }} 个</span>
+  </div>
+
+  {% if categories %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="nowrap">ID</th>
+          <th class="nowrap">名称</th>
+          <th class="nowrap">图标</th>
+          <th class="nowrap">配色</th>
+          <th class="nowrap">题目数</th>
+          <th class="nowrap">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in categories %}
+        <tr>
+          <td class="num">{{ c.id }}</td>
+          <td class="nowrap"><strong>{{ c.name }}</strong></td>
+          <td class="nowrap"><span class="badge">{{ c.icon or '—' }}</span></td>
+          <td class="nowrap">
+            <span class="color-dot" style="background: {{ c.color }}"></span>{{ c.color }}
+            <span class="cell-sub">/ {{ c.bg_color }}</span>
+          </td>
+          <td class="nowrap">{{ c.count }}</td>
+          <td class="nowrap">
+            <div class="row-actions">
+              <a class="btn btn-sm" href="{{ url_for('taxonomy.category_list', edit=c.id) }}">编辑</a>
+              <a class="btn btn-sm" href="{{ url_for('question.index', category_id=c.id) }}">看题目</a>
+              <form method="post" action="{{ url_for('taxonomy.category_delete', cid=c.id) }}"
+                    data-confirm="确定删除分类「{{ c.name }}」吗？">
+                <button class="btn btn-sm btn-danger" type="submit">删除</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><strong>还没有分类</strong>请先在上方新增一个分类</div>
+  {% endif %}
+</div>
+
+{% endblock %}

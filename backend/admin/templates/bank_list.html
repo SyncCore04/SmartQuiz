@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}热门题库{% endblock %}
+{% block page_title %}热门题库{% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-head">
+    <h2>题库列表</h2>
+    <span class="hint">共 {{ banks|length }} 个 · 展示在小程序首页「热门题库」横向卡片区</span>
+    <span class="spacer"></span>
+    <a class="btn btn-primary" href="{{ url_for('taxonomy.bank_create') }}">新增题库</a>
+  </div>
+
+  {% if banks %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="nowrap">ID</th>
+          <th>题库</th>
+          <th class="nowrap">封面</th>
+          <th class="nowrap">标签</th>
+          <th class="nowrap">已加入</th>
+          <th class="nowrap">题量</th>
+          <th class="nowrap">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in banks %}
+        <tr>
+          <td class="num">{{ b.id }}</td>
+          <td class="cell-title">
+            <span class="ellipsis"><strong>{{ b.title }}</strong></span>
+            <span class="cell-sub">{{ b.desc or '无描述' }}</span>
+          </td>
+          <td class="nowrap">
+            {% if b.cover %}
+            <img class="thumb" src="{{ image_url(b.cover) }}" alt="{{ b.title }}">
+            {% else %}
+            <span class="cell-sub">—</span>
+            {% endif %}
+          </td>
+          <td class="nowrap">{% if b.tag %}<span class="badge badge-blue">{{ b.tag }}</span>{% else %}—{% endif %}</td>
+          <td class="nowrap">{{ b.joined }}</td>
+          <td class="nowrap">{{ b.question_count }}</td>
+          <td class="nowrap">
+            <div class="row-actions">
+              <a class="btn btn-sm" href="{{ url_for('taxonomy.bank_edit', bid=b.id) }}">编辑</a>
+              <a class="btn btn-sm" href="{{ url_for('taxonomy.bank_questions', bid=b.id) }}">挂载题目</a>
+              <form method="post" action="{{ url_for('taxonomy.bank_delete', bid=b.id) }}"
+                    data-confirm="确定删除题库「{{ b.title }}」吗？题目本身不会被删除，只会解除挂载关系。">
+                <button class="btn btn-sm btn-danger" type="submit">删除</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><strong>还没有题库</strong>点击右上角「新增题库」创建第一个</div>
+  {% endif %}
+</div>
+
+{% endblock %}

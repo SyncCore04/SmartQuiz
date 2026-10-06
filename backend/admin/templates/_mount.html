@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}{{ entity_label }}{% endblock %}
+{% block page_title %}{{ entity_label }}{% endblock %}
+
+{% block content %}
+
+<div class="alert alert-info">{{ entity_title }}</div>
+
+<form method="post" action="{{ action_url }}">
+  <div class="card">
+    <div class="card-head">
+      <h2>选择题目</h2>
+      <span class="hint">已选 <span class="check-count" id="checkCount">0</span> 道 / 共 {{ questions|length }} 道</span>
+      <span class="spacer"></span>
+      <button class="btn btn-primary btn-sm" type="submit">保存挂载</button>
+    </div>
+
+    <div class="check-toolbar">
+      <input class="form-control" type="text" id="checkSearch" placeholder="按题干 / 分类 / 题型筛选">
+      <button class="btn btn-sm" type="button" id="checkSelectAll">全选当前可见</button>
+      <button class="btn btn-sm" type="button" id="checkClearAll">清空全部</button>
+      <span class="spacer"></span>
+      <a class="btn btn-sm" href="{{ back_url }}">返回列表</a>
+    </div>
+
+    {% if questions %}
+    <div class="check-list" id="checkList">
+      {% for q in questions %}
+      <label class="check-item" data-title="{{ q.title }} {{ q.category_name or '' }} {{ q.type }}">
+        <input type="checkbox" name="question_ids" value="{{ q.id }}"
+               {% if q.id in selected %}checked{% endif %}>
+        <span class="check-main">
+          <span class="check-title">{{ q.title }}</span>
+          <span class="cell-sub">{{ q.category_name or '未分类' }} · {{ q.type }} · {{ q.difficulty }}</span>
+        </span>
+        <span class="badge badge-indigo">{{ q.answer }}</span>
+      </label>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty">
+      <strong>题库里还没有题目</strong>
+      请先到「题目管理」新增或批量导入题目
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="form-actions" style="border-top:none; padding-top:0;">
+        <button class="btn btn-primary" type="submit">保存挂载</button>
+        <a class="btn" href="{{ back_url }}">返回列表</a>
+        <span class="form-hint" style="margin:0;">
+          保存时按当前勾选结果整体替换，取消勾选即解除关联（不会删除题目本身）。
+        </span>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

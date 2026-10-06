@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>登录 · SmartQuiz 管理后台</title>
+  <script>
+    // 在 CSS 之前应用主题，避免深色模式下打开页面瞬间闪白
+    try {
+      if (localStorage.getItem('smartquiz_admin_theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) { /* 隐私模式下忽略 */ }
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v={{ asset_v }}">
+</head>
+<body class="login-body">
+
+<div class="login-card">
+  <div class="login-head">
+    <span class="brand-mark">SQ</span>
+    <h1>SmartQuiz 管理后台</h1>
+    <p>在线答题系统 · 后台管理</p>
+  </div>
+
+  {% if error %}
+  <div class="alert alert-error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" autocomplete="off">
+    <div class="form-group">
+      <label for="username">管理员账号</label>
+      <input class="form-control" type="text" id="username" name="username"
+             placeholder="请输入账号" required autofocus>
+    </div>
+
+    <div class="form-group">
+      <label for="password">密码</label>
+      <input class="form-control" type="password" id="password" name="password"
+             placeholder="请输入密码" required>
+    </div>
+
+    <button class="btn btn-primary btn-block" type="submit">登 录</button>
+  </form>
+
+  <p class="login-tip">默认账号 admin / admin123，修改方式见 backend/admin/config.py</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}批量导入题目{% endblock %}
+{% block page_title %}批量导入题目{% endblock %}
+
+{% block content %}
+
+{% if result %}
+  {% if result.imported %}
+  <div class="alert alert-success">成功导入 {{ result.imported }} 道题目，小程序端刷新即可看到。</div>
+  {% endif %}
+  {% if result.errors %}
+  <div class="alert alert-warning">
+    <div>以下 {{ result.errors|length }} 行被跳过：</div>
+    <ul style="margin:6px 0 0; padding-left:20px;">
+      {% for e in result.errors %}<li>{{ e }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  {% if not result.imported and not result.errors %}
+  <div class="alert alert-info">没有解析到任何内容，请检查粘贴的文本格式。</div>
+  {% endif %}
+{% endif %}
+
+<div class="card">
+  <div class="card-head">
+    <h2>粘贴题库文本</h2>
+    <span class="hint">格式与 backend/questions_data.py 完全一致，可直接从该文件复制多行粘进来</span>
+  </div>
+  <div class="card-body">
+    <form method="post">
+      <div class="form-group">
+        <label for="content">题目文本</label>
+        <textarea class="form-control" id="content" name="content" rows="14"
+                  style="font-family:Consolas,Menlo,monospace; font-size:13px;"
+                  placeholder='("语文", "single", "简单", "下列词语中没有错别字的一组是？", "A. 甲 B. 乙 C. 丙 D. 丁", "B", "解析文字"),'>{{ request.form.get('content', '') }}</textarea>
+        <div class="form-hint">
+          每行一道题，用元组表示，共 7 个字段；以 <code>#</code> 开头的行和空行会被忽略。
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">开始导入</button>
+        <a class="btn" href="{{ url_for('question.index') }}">返回列表</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><h2>字段说明</h2></div>
+  <div class="card-body">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="nowrap">顺序</th>
+            <th class="nowrap">字段</th>
+            <th>取值要求</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="num">1</td>
+            <td class="nowrap">分类名</td>
+            <td>必须是「学科分类」中已存在的名称，否则该行会被跳过</td>
+          </tr>
+          <tr>
+            <td class="num">2</td>
+            <td class="nowrap">题型 key</td>
+            <td>
+              {% for key, label in type_display.items() %}
+              <span class="badge badge-blue">{{ key }} = {{ label }}</span>
+              {% endfor %}
+            </td>
+          </tr>
+          <tr>
+            <td class="num">3</td>
+            <td class="nowrap">难度</td>
+            <td>
+              {% for d in difficulties %}<span class="badge">{{ d }}</span> {% endfor %}
+            </td>
+          </tr>
+          <tr>
+            <td class="num">4</td>
+            <td class="nowrap">题干</td>
+            <td>不能为空</td>
+          </tr>
+          <tr>
+            <td class="num">5</td>
+            <td class="nowrap">选项文本</td>
+            <td>格式 <code>"A. 内容 B. 内容 C. 内容 D. 内容"</code>；判断题写 <code>"A. 正确 B. 错误"</code>；填空题留空字符串 <code>""</code></td>
+          </tr>
+          <tr>
+            <td class="num">6</td>
+            <td class="nowrap">答案</td>
+            <td>单选 / 判断填单个字母（如 <code>"B"</code>）；多选填字母组合（如 <code>"ABC"</code>）；填空直接填答案文本</td>
+          </tr>
+          <tr>
+            <td class="num">7</td>
+            <td class="nowrap">解析</td>
+            <td>选填，但建议填写（错题本会展示）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-hint" style="margin-top:14px;">
+      提示：导入是「追加」而不是「覆盖」，重复导入同一批文本会产生重复题目，请注意。
+    </div>
+  </div>
+</div>
+
+{% endblock %}

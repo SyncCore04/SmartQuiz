@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}管理后台{% endblock %} · SmartQuiz</title>
+  <script>
+    // 在 CSS 之前应用主题，避免深色模式下打开页面瞬间闪白
+    try {
+      if (localStorage.getItem('smartquiz_admin_theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) { /* 隐私模式下忽略 */ }
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v={{ asset_v }}">
+</head>
+<body>
+<div class="layout">
+
+  <!-- ==================== 左侧导航 ==================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="brand-mark">SQ</span>
+      <span class="brand-text">
+        <strong>SmartQuiz</strong>
+        <small>管理后台</small>
+      </span>
+    </div>
+
+    <nav class="nav">
+      {% for item in nav_items %}
+      <a class="nav-item{% if item.active %} is-active{% endif %}" href="{{ item.url }}">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{{ item.icon|safe }}</svg>
+        <span>{{ item.label }}</span>
+      </a>
+      {% endfor %}
+    </nav>
+
+    <div class="sidebar-foot">
+      <span class="sidebar-user">{{ admin_user }}</span>
+      <a class="sidebar-logout" href="{{ url_for('auth.logout') }}">退出</a>
+    </div>
+  </aside>
+
+  <!-- ==================== 右侧主体 ==================== -->
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn" id="sidebarToggle" type="button" aria-label="展开/收起菜单">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <h1 class="page-title">{% block page_title %}{% endblock %}</h1>
+
+      <div class="topbar-right">
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="切换浅色/深色主题">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}?v={{ asset_v }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

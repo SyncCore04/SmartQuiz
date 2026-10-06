@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}{{ '新增考试' if is_new else '编辑考试' }}{% endblock %}
+{% block page_title %}{{ '新增考试' if is_new else '编辑考试 #' ~ exam.id }}{% endblock %}
+
+{% block content %}
+
+<form method="post">
+  <div class="card">
+    <div class="card-head"><h2>考试信息</h2></div>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="title">考试名称 <span class="req">*</span></label>
+        <input class="form-control" type="text" id="title" name="title" required
+               value="{{ exam.title }}" placeholder="例如：2024年高考语文模拟考试">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="date">考试日期</label>
+          <input class="form-control" type="date" id="date" name="date" value="{{ exam.date }}">
+        </div>
+
+        <div class="form-group">
+          <label for="duration">考试时长</label>
+          <input class="form-control" type="text" id="duration" name="duration"
+                 value="{{ exam.duration }}" placeholder="例如：120分钟">
+        </div>
+
+        <div class="form-group">
+          <label for="joined">已参加人数</label>
+          <input class="form-control" type="number" id="joined" name="joined" min="0"
+                 value="{{ exam.joined }}">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="status">状态 <span class="req">*</span></label>
+          <select class="form-control" id="status" name="status" required>
+            {% for s in statuses %}
+            <option value="{{ s }}" {% if exam.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="status_color">状态标签色</label>
+          <input class="form-control" type="text" id="status_color" name="status_color"
+                 value="{{ exam.status_color }}" placeholder="留空则按状态自动取色">
+          <div class="form-hint">形如 #4F46E5，留空时：进行中 #4F46E5 / 未开始 #FFD166 / 已结束 #999999</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cover">封面图片路径</label>
+        <input class="form-control" type="text" id="cover" name="cover"
+               value="{{ exam.cover }}" placeholder="/images/photo-xxx_w400.jpg"
+               data-image-preview="coverPreview">
+        <div class="form-hint">
+          小程序用的图片放在 <code>front/images/</code> 目录下，这里填 <code>/images/文件名</code>。
+          后台不提供上传，新增图片请手动放进该目录。
+        </div>
+        <div class="img-preview" id="coverPreview">
+          {% if exam.cover %}<img src="{{ image_url(exam.cover) }}" alt="封面预览">{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="form-actions" style="border-top:none; padding-top:0;">
+        <button class="btn btn-primary" type="submit">保存</button>
+        <a class="btn" href="{{ url_for('taxonomy.exam_list') }}">返回列表</a>
+        {% if not is_new %}
+        <span class="spacer"></span>
+        <a class="btn" href="{{ url_for('taxonomy.exam_questions', eid=exam.id) }}">去挂载题目</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

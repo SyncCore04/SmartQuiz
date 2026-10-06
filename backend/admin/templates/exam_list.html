@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}模拟考试{% endblock %}
+{% block page_title %}模拟考试{% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-head">
+    <h2>考试列表</h2>
+    <span class="hint">共 {{ exams|length }} 场</span>
+    <span class="spacer"></span>
+    <a class="btn btn-primary" href="{{ url_for('taxonomy.exam_create') }}">新增考试</a>
+  </div>
+
+  {% if exams %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="nowrap">ID</th>
+          <th>考试名称</th>
+          <th class="nowrap">封面</th>
+          <th class="nowrap">日期</th>
+          <th class="nowrap">时长</th>
+          <th class="nowrap">状态</th>
+          <th class="nowrap">已参加</th>
+          <th class="nowrap">题量</th>
+          <th class="nowrap">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in exams %}
+        <tr>
+          <td class="num">{{ e.id }}</td>
+          <td class="cell-title"><span class="ellipsis"><strong>{{ e.title }}</strong></span></td>
+          <td class="nowrap">
+            {% if e.cover %}
+            <img class="thumb" src="{{ image_url(e.cover) }}" alt="{{ e.title }}">
+            {% else %}
+            <span class="cell-sub">—</span>
+            {% endif %}
+          </td>
+          <td class="nowrap">{{ e.date or '—' }}</td>
+          <td class="nowrap">{{ e.duration or '—' }}</td>
+          <td class="nowrap">
+            <span class="badge" style="background: {{ e.status_color }}1a; color: {{ e.status_color }};">
+              {{ e.status }}
+            </span>
+          </td>
+          <td class="nowrap">{{ e.joined }}</td>
+          <td class="nowrap">{{ e.total_count }}</td>
+          <td class="nowrap">
+            <div class="row-actions">
+              <a class="btn btn-sm" href="{{ url_for('taxonomy.exam_edit', eid=e.id) }}">编辑</a>
+              <a class="btn btn-sm" href="{{ url_for('taxonomy.exam_questions', eid=e.id) }}">挂载题目</a>
+              <form method="post" action="{{ url_for('taxonomy.exam_delete', eid=e.id) }}"
+                    data-confirm="确定删除考试「{{ e.title }}」吗？题目本身不会被删除，只会解除挂载关系。">
+                <button class="btn btn-sm btn-danger" type="submit">删除</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><strong>还没有考试</strong>点击右上角「新增考试」创建第一场</div>
+  {% endif %}
+</div>
+
+{% endblock %}

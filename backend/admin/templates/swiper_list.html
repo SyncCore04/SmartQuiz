@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}首页轮播图{% endblock %}
+{% block page_title %}首页轮播图{% endblock %}
+
+{% block content %}
+
+<!-- ==================== 新增 / 编辑 ==================== -->
+<div class="card">
+  <div class="card-head">
+    <h2>{{ '编辑轮播图：' ~ editing.title if editing else '新增轮播图' }}</h2>
+    <span class="hint">展示在小程序首页顶部轮播区域</span>
+  </div>
+  <div class="card-body">
+    <form method="post" action="{{ url_for('swiper.save') }}">
+      {% if editing %}<input type="hidden" name="id" value="{{ editing.id }}">{% endif %}
+
+      <div class="form-group">
+        <label for="title">标题 <span class="req">*</span></label>
+        <input class="form-control" type="text" id="title" name="title" required
+               value="{{ editing.title if editing else '' }}" placeholder="例如：每日刷题挑战">
+      </div>
+
+      <div class="form-group">
+        <label for="image">图片路径 <span class="req">*</span></label>
+        <input class="form-control" type="text" id="image" name="image" required
+               value="{{ editing.image if editing else '' }}" placeholder="/images/photo-xxx_w1080.jpg"
+               data-image-preview="imagePreview">
+        <div class="form-hint">
+          图片放在 <code>front/images/</code> 目录下，这里填 <code>/images/文件名</code>；
+          轮播图建议用尺寸较大的图（如 _w1080）。
+        </div>
+        <div class="img-preview" id="imagePreview">
+          {% if editing and editing.image %}<img src="{{ image_url(editing.image) }}" alt="轮播图预览">{% endif %}
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">{{ '保存修改' if editing else '新增轮播图' }}</button>
+        {% if editing %}
+        <a class="btn" href="{{ url_for('swiper.index') }}">取消编辑</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== 列表 ==================== -->
+<div class="card">
+  <div class="card-head">
+    <h2>轮播图列表</h2>
+    <span class="hint">共 {{ swipers|length }} 张 · 按 ID 顺序展示</span>
+  </div>
+
+  {% if swipers %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="nowrap">ID</th>
+          <th class="nowrap">预览</th>
+          <th>标题</th>
+          <th>图片路径</th>
+          <th class="nowrap">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in swipers %}
+        <tr>
+          <td class="num">{{ s.id }}</td>
+          <td class="nowrap"><img class="thumb" src="{{ image_url(s.image) }}" alt="{{ s.title }}"></td>
+          <td class="nowrap"><strong>{{ s.title }}</strong></td>
+          <td class="cell-title"><span class="ellipsis cell-sub">{{ s.image }}</span></td>
+          <td class="nowrap">
+            <div class="row-actions">
+              <a class="btn btn-sm" href="{{ url_for('swiper.index', edit=s.id) }}">编辑</a>
+              <form method="post" action="{{ url_for('swiper.delete', sid=s.id) }}"
+                    data-confirm="确定删除轮播图「{{ s.title }}」吗？">
+                <button class="btn btn-sm btn-danger" type="submit">删除</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><strong>还没有轮播图</strong>请在上方新增一张</div>
+  {% endif %}
+</div>
+
+{% endblock %}

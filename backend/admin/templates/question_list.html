@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}题目管理{% endblock %}
+{% block page_title %}题目管理{% endblock %}
+
+{% block content %}
+
+<!-- ==================== 筛选条件 ==================== -->
+<div class="card">
+  <form class="filter-bar" method="get" action="{{ url_for('question.index') }}">
+    <div class="filter-item">
+      <label for="f-category">学科分类</label>
+      <select class="form-control" id="f-category" name="category_id">
+        <option value="">全部</option>
+        {% for c in categories %}
+        <option value="{{ c.id }}" {% if filters.category_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label for="f-type">题型</label>
+      <select class="form-control" id="f-type" name="type_key">
+        <option value="">全部</option>
+        {% for key, label in type_display.items() %}
+        <option value="{{ key }}" {% if filters.type_key == key %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label for="f-difficulty">难度</label>
+      <select class="form-control" id="f-difficulty" name="difficulty">
+        <option value="">全部</option>
+        {% for d in difficulties %}
+        <option value="{{ d }}" {% if filters.difficulty == d %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-item wide">
+      <label for="f-keyword">关键词</label>
+      <input class="form-control" type="text" id="f-keyword" name="keyword"
+             value="{{ filters.keyword }}" placeholder="搜索题干内容">
+    </div>
+
+    <div class="filter-item">
+      <label for="f-per-page">每页</label>
+      <select class="form-control" id="f-per-page" name="per_page">
+        {% for n in per_page_choices %}
+        <option value="{{ n }}" {% if pager.per_page == n %}selected{% endif %}>{{ n }} 条</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-actions">
+      <button class="btn btn-primary" type="submit">查询</button>
+      <a class="btn" href="{{ url_for('question.index') }}">重置</a>
+    </div>
+  </form>
+</div>
+
+<!-- ==================== 列表 ==================== -->
+<div class="card">
+  <div class="card-head">
+    <h2>题目列表</h2>
+    <span class="hint">共 {{ pager.total }} 题</span>
+    <span class="spacer"></span>
+    <a class="btn" href="{{ url_for('question.import_questions') }}">批量导入</a>
+    <a class="btn btn-primary" href="{{ url_for('question.create') }}">新增题目</a>
+  </div>
+
+  {% if questions %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="nowrap">ID</th>
+          <th>题目</th>
+          <th class="nowrap">答案</th>
+          <th class="nowrap">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for q in questions %}
+        <tr>
+          <td class="num">{{ q.id }}</td>
+          <td class="cell-title">
+            <span class="ellipsis">{{ q.title }}</span>
+            <span class="cell-sub">
+              {{ q.category_name or '未分类' }} · {{ q.type }} · {{ q.difficulty }}
+            </span>
+          </td>
+          <td class="nowrap"><span class="badge badge-indigo">{{ q.answer }}</span></td>
+          <td class="nowrap">
+            <div class="row-actions">
+              <a class="btn btn-sm" href="{{ url_for('question.edit', qid=q.id) }}">编辑</a>
+              <form method="post" action="{{ url_for('question.delete', qid=q.id) }}"
+                    data-confirm="确定删除这道题吗？题库 / 考试中与它的关联也会一并移除。">
+                <input type="hidden" name="next" value="{{ request.full_path }}">
+                <button class="btn btn-sm btn-danger" type="submit">删除</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% include '_pager.html' %}
+  {% else %}
+  <div class="empty">
+    <strong>没有符合条件的题目</strong>
+    换个筛选条件试试，或点击右上角「新增题目」
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

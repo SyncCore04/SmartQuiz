@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}用户与记录{% endblock %}
+{% block page_title %}用户与记录{% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-head">
+    <h2>用户列表</h2>
+    <span class="hint">共 {{ pager.total }} 个 · 数据来自小程序端游客登录</span>
+  </div>
+
+  {% if users %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="nowrap">ID</th>
+          <th class="nowrap">头像</th>
+          <th class="nowrap">昵称</th>
+          <th class="nowrap">提交次数</th>
+          <th class="nowrap">答题题数</th>
+          <th class="nowrap">正确率</th>
+          <th class="nowrap">错题数</th>
+          <th class="nowrap">注册时间</th>
+          <th class="nowrap">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td class="num">{{ u.id }}</td>
+          <td class="nowrap">
+            {% if u.avatar %}
+            <img class="avatar-sm" src="{{ image_url(u.avatar) }}" alt="{{ u.nickname }}">
+            {% else %}
+            <span class="cell-sub">—</span>
+            {% endif %}
+          </td>
+          <td class="nowrap"><strong>{{ u.nickname }}</strong></td>
+          <td class="nowrap">{{ u.record_count }}</td>
+          <td class="nowrap">{{ u.answer_total }}</td>
+          <td class="nowrap"><span class="badge badge-blue">{{ u.accuracy }}</span></td>
+          <td class="nowrap">{{ u.wrong_count }}</td>
+          <td class="nowrap">{{ u.created_at or '—' }}</td>
+          <td class="nowrap">
+            <a class="btn btn-sm" href="{{ url_for('user.detail', uid=u.id) }}">查看详情</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% include '_pager.html' %}
+  {% else %}
+  <div class="empty">
+    <strong>还没有用户</strong>
+    在小程序端首次登录后，这里会出现用户记录
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

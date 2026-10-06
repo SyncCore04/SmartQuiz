@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}用户详情{% endblock %}
+{% block page_title %}用户详情 · {{ user.nickname }}{% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-head">
+    <h2>基本信息</h2>
+    <span class="spacer"></span>
+    <a class="btn btn-sm" href="{{ url_for('user.index') }}">返回用户列表</a>
+  </div>
+  <div class="card-body" style="display:flex; align-items:center; gap:16px;">
+    {% if user.avatar %}
+    <img class="avatar-lg" src="{{ image_url(user.avatar) }}" alt="{{ user.nickname }}">
+    {% endif %}
+    <div>
+      <div style="font-size:16px; font-weight:600;">{{ user.nickname }}</div>
+      <div class="cell-sub">用户 ID：{{ user.id }} · 注册时间：{{ user.created_at or '—' }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">提交次数</div>
+    <div class="stat-value">{{ summary.record_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">累计答题题数</div>
+    <div class="stat-value">{{ summary.answer_total }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">正确率</div>
+    <div class="stat-value">{{ summary.accuracy }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">错题数</div>
+    <div class="stat-value">{{ summary.wrong_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">有记录的天数</div>
+    <div class="stat-value">{{ summary.active_days }}</div>
+  </div>
+</div>
+
+<!-- ==================== 答题记录 ==================== -->
+<div class="card">
+  <div class="card-head">
+    <h2>答题记录</h2>
+    <span class="hint">共 {{ records|length }} 条</span>
+  </div>
+
+  {% if records %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="nowrap">ID</th>
+          <th>练习标题</th>
+          <th class="nowrap">得分</th>
+          <th class="nowrap">题数</th>
+          <th class="nowrap">对 / 错</th>
+          <th class="nowrap">日期</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td class="num">{{ r.id }}</td>
+          <td class="cell-title"><span class="ellipsis">{{ r.title }}</span></td>
+          <td class="nowrap">
+            <span class="badge {% if r.score >= 60 %}badge-green{% else %}badge-red{% endif %}">
+              {{ r.score|round|int }} 分
+            </span>
+          </td>
+          <td class="nowrap">{{ r.total }}</td>
+          <td class="nowrap">{{ r.correct }} / {{ r.wrong }}</td>
+          <td class="nowrap">{{ r.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty">该用户还没有答题记录</div>
+  {% endif %}
+</div>
+
+<!-- ==================== 错题本 ==================== -->
+<div class="card">
+  <div class="card-head">
+    <h2>错题本</h2>
+    <span class="hint">共 {{ wrong_items|length }} 条</span>
+  </div>
+
+  {% if wrong_items %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="nowrap">ID</th>
+          <th>题目</th>
+          <th class="nowrap">我的答案</th>
+          <th class="nowrap">正确答案</th>
+          <th>解析</th>
+          <th class="nowrap">收集时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in wrong_items %}
+        <tr>
+          <td class="num">{{ w.id }}</td>
+          <td class="cell-title"><span class="ellipsis">{{ w.title }}</span></td>
+          <td class="nowrap"><span class="badge badge-red">{{ w.my_answer or '未作答' }}</span></td>
+          <td class="nowrap"><span class="badge badge-green">{{ w.correct_answer }}</span></td>
+          <td class="cell-title"><span class="ellipsis">{{ w.analysis or '—' }}</span></td>
+          <td class="nowrap">{{ w.created_at or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty">该用户还没有错题</div>
+  {% endif %}
+</div>
+
+{% endblock %}

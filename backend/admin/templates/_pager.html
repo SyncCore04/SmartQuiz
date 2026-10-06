@@ -1,0 +1,19 @@
+{# 通用分页条：各列表页 include 进来即可，参数为 pager #}
+{% if pager.total > 0 %}
+<div class="pager">
+  <span class="pager-info">共 {{ pager.total }} 条 · 第 {{ pager.page }} / {{ pager.pages }} 页</span>
+  <span class="spacer"></span>
+  <div class="pager-links">
+    <a class="page-link{% if not pager.has_prev %} is-disabled{% endif %}"
+       href="?page={{ pager.prev_page }}{% if pager.qs %}&amp;{{ pager.qs }}{% endif %}">上一页</a>
+
+    {% for p in pager.window %}
+    <a class="page-link{% if p == pager.page %} is-active{% endif %}"
+       href="?page={{ p }}{% if pager.qs %}&amp;{{ pager.qs }}{% endif %}">{{ p }}</a>
+    {% endfor %}
+
+    <a class="page-link{% if not pager.has_next %} is-disabled{% endif %}"
+       href="?page={{ pager.next_page }}{% if pager.qs %}&amp;{{ pager.qs }}{% endif %}">下一页</a>
+  </div>
+</div>
+{% endif %}
